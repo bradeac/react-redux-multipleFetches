@@ -17,18 +17,29 @@ class ItemList extends Component {
             return <p>Loading…</p>;
         }
 
+        if (!this.props.items.data) {
+            return <p>Loading…</p>;
+        } 
+
+        if (this.props.items.data)
+            console.log('dada', Object.entries(this.props.items.data))
+
         return (
             <div style={setMargin}>
-                {this.props.items.map((item) => (
-                    <div key={item.id}>
-                            <ListGroup style={setDistanceBetweenItems}>
-                                <ListGroupItem href={item.officialSite} header={item.name}>
-                                    Rating: {item.rating.average}
-                                    <span className="pull-xs-right">Premiered: {item.premiered}</span>
-                                </ListGroupItem>
-                            </ListGroup>
-                    </div>
-                ))}
+                {
+                    Object.entries(this.props.items.data).map((item) => {
+                        console.log(actualItem)
+                        const actualItem = item[1]
+                        return <div key={actualItem.id}>
+                                <ListGroup style={setDistanceBetweenItems}>
+                                    <ListGroupItem header={actualItem.name}>
+                                        Price: {actualItem.quotes.USD.price}
+                                        <span className="pull-xs-right">Rank: {actualItem.rank}</span>
+                                    </ListGroupItem>
+                                </ListGroup>
+                        </div>
+                    })
+                }
             </div>
         );
     }

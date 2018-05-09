@@ -21,7 +21,7 @@ export function itemsAreLoading(state = false, action) {
 export function items(state = [], action) {
     switch (action.type) {
         case 'ITEMS_FETCH_DATA_SUCCESS':
-            console.log(action.items)
+            console.log('da', action.items)
             return action.items;
 
         default:
