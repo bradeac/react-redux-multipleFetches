@@ -21,21 +21,36 @@ export function itemsFetchDataSuccess(items) {
     };
 }
 
-export function itemsFetchData(url) {
+export function itemsFetchData(urls) {
     return (dispatch) => {
         dispatch(itemsAreLoading(true));
 
-        axios.get(url)
-            .then((response) => {
-                if (response.status !== 200) {
-                    throw Error(response.statusText);
-                }
-
+        callEndpoints(urls)
+            .then((result) => {
                 dispatch(itemsAreLoading(false));
 
-                return response;
+                dispatch(itemsFetchDataSuccess(result))
             })
-            .then((response) => dispatch(itemsFetchDataSuccess(response.data)))
             .catch(() => dispatch(itemsHaveError(true)));
     };
+}
+
+function callEndpoints(urls) {
+    let result = []
+
+    return new Promise((resolve, reject) =>  {
+        for (const url of urls) {
+            axios.get(url)
+                .then((response) => {
+                    if (response.status !== 200) {
+                        throw Error(response.statusText);
+                    }
+
+                    result.push(response.data[0])
+                })
+                .catch((error) => reject('error', error))
+        }
+
+        resolve(result)
+    })
 }

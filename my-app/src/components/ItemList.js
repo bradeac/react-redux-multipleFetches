@@ -5,10 +5,19 @@ import { itemsFetchData } from '../actions/items';
 
 class ItemList extends Component {
     componentDidMount() {
-        this.props.fetchData('https://api.coinmarketcap.com/v2/ticker/');
+        //this.props.fetchData('https://api.coinmarketcap.com/v2/ticker/');
+
+        const urls = ['https://api.coinmarketcap.com/v1/ticker/bitcoin/', 'https://api.coinmarketcap.com/v1/ticker/wanchain/']
+
+        this.props.fetchData(urls);
     }
 
     render() {
+        console.log(this.props.items)
+        // for(const item of this.props.items) {
+        //     console.log('item', item)
+        // }
+
         if (this.props.hasError) {
             return <p>Sorry! There was an error loading the items</p>;
         }
@@ -17,31 +26,27 @@ class ItemList extends Component {
             return <p>Loading…</p>;
         }
 
-        if (!this.props.items.data) {
-            return <p>Loading…</p>;
-        } 
-
-        if (this.props.items.data)
-            console.log('dada', Object.entries(this.props.items.data))
-
+        if (this.props.items.length === 0) {
+            return <p>Loading...</p>
+        }
+        else {
+        
         return (
             <div style={setMargin}>
-                {
-                    Object.entries(this.props.items.data).map((item) => {
-                        console.log(actualItem)
-                        const actualItem = item[1]
-                        return <div key={actualItem.id}>
-                                <ListGroup style={setDistanceBetweenItems}>
-                                    <ListGroupItem header={actualItem.name}>
-                                        Price: {actualItem.quotes.USD.price}
-                                        <span className="pull-xs-right">Rank: {actualItem.rank}</span>
-                                    </ListGroupItem>
-                                </ListGroup>
-                        </div>
-                    })
-                }
+            {this.props.items[0].name}
+                {/* {this.props.items.map((item) => {
+                    return <div key={item.id}>
+                            <ListGroup style={setDistanceBetweenItems}>
+                                <ListGroupItem header={item.name}>
+                                    Price: {item.price_usd}
+                                    <span className="pull-xs-right">Rank: {item.rank}</span>
+                                </ListGroupItem>
+                            </ListGroup>
+                    </div>
+                })} */}
             </div>
         );
+        }
     }
 }
 
